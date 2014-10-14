@@ -74,7 +74,7 @@
 
 - (id)initFromCurrentYearWithYears:(NSInteger)years
 {
-    NSDateComponents *coms = [[NSCalendar currentCalendar] components:NSYearCalendarUnit fromDate:[NSDate date]];
+    NSDateComponents *coms = [[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]];
     return [self initWithStartYear:coms.year endYear:coms.year+years];
 }
 
@@ -207,7 +207,7 @@
         CGContextStrokeLineSegments(context, points, 2);
         free(points);
         
-        NSDateComponents *components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit|NSWeekdayCalendarUnit
+        NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitWeekday
                                                                        fromDate:self.date];
         NSString *text = [NSString stringWithFormat:@"%ld", (long)components.day];
         UIFont *font = [UIFont systemFontOfSize:TextFont];
@@ -297,7 +297,7 @@
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"MMM"];
     NSDate *date = [NSDate date];
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSMonthCalendarUnit fromDate:date];
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:date];
     components.month = month;
     date = [[NSCalendar currentCalendar] dateFromComponents:components];
     return [fmt stringFromDate:date];
@@ -330,7 +330,7 @@
     self.collectionView.scrollsToTop = NO;
     
     NSDateComponents *components = [[NSCalendar currentCalendar]
-                                    components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit
+                                    components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay
                                     fromDate:[NSDate date]];
     self.today = components;
     
@@ -446,14 +446,14 @@
     NSCalendar *calendar = [NSCalendar currentCalendar];
     [calendar setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     
-    NSDateComponents *components = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit)
+    NSDateComponents *components = [calendar components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
                                                fromDate:[NSDate dateWithTimeIntervalSince1970:0]];
     [components setYear:year];
     [components setMonth:month];
     [components setDay:days];
     
     NSDate *date = [calendar dateFromComponents:components];
-    components = [calendar components:(NSWeekOfMonthCalendarUnit) fromDate:date];
+    components = [calendar components:(NSCalendarUnitWeekOfMonth) fromDate:date];
     
     return components.weekOfMonth * 7;
 }
@@ -467,14 +467,14 @@
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
-    NSDateComponents *components = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit)
+    NSDateComponents *components = [calendar components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
                                                fromDate:[NSDate dateWithTimeIntervalSince1970:0]];
     [components setYear:year];
     [components setMonth:month];
     [components setDay:1];
     
     NSDate *date = [calendar dateFromComponents:components];
-    components = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSWeekdayCalendarUnit|NSWeekOfMonthCalendarUnit) fromDate:date];
+    components = [calendar components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitWeekday|NSCalendarUnitWeekOfMonth) fromDate:date];
     
     NSInteger startRow = (components.weekday - 1) % 7;
     NSInteger day = indexPath.row - startRow + 1;
@@ -515,14 +515,14 @@
         NSCalendar *calendar = [NSCalendar currentCalendar];
         [calendar setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
         
-        NSDateComponents *components = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit)
+        NSDateComponents *components = [calendar components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
                                                    fromDate:[NSDate dateWithTimeIntervalSince1970:0]];
         [components setYear:year];
         [components setMonth:month];
         [components setDay:0];
         
         NSDate *date = [calendar dateFromComponents:components];
-        components = [calendar components:(NSYearCalendarUnit|NSWeekdayCalendarUnit|NSWeekOfMonthCalendarUnit)
+        components = [calendar components:(NSCalendarUnitYear|NSCalendarUnitWeekday|NSCalendarUnitWeekOfMonth)
                                  fromDate:date];
         
         header.firstWeekDay = components.weekday % 7;
